@@ -2,20 +2,29 @@ require './chess_pieces'
 require 'debugger'
 
 class Chess
+  attr_reader :player
+
   def initialize
-    @board = Board.new
+    @game_board = Board.new
     @player = :white
   end
 
   def run
-    until @board.over?
-      @board.display
+    until @game_board.over?
+      @game_board.display
       play_turn
     end
   end
 
   def play_turn
+    from_pos, to_pos = get_move
+    piece = @game_board[from_pos[0]][from_pos[1]]
 
+    until piece.move(from_pos, to_pos, @game_board)
+      puts "Invalid move. Try again."
+      from_pos, to_pos = get_move
+      piece = @game_board[from_pos[0]][from_pos[1]]
+    end
 
     @player = (@player == :white ? :blue : :white)
   end
@@ -23,18 +32,35 @@ class Chess
   def get_move
     puts "Player #{@player.to_s.capitalize}, pick your piece (ex. a2)."
     from_pos = parse(gets.chomp)
-    puts "Where would you like to more?"
+    puts "Where would you like to move?"
     to_pos = parse(gets.chomp)
-    until
+    [from_pos, to_pos]
+  end
+
+  def parse(input)
+    [input[1].to_i, "abcdefgh".index(input[0])]
+  end
+
+  def list_move_deltas(piece)
+
 
   end
 
-  def parse
-
-  end
+  # def valid_move?(move_arr)
+  #   from, to = move_arr
+  #
+  #   from_object = @game_board.board[from[0]][from[1]]
+  #   to_object = @game_board.board[to[0]][to[1]]
+  #
+  #   case from_object
+  #   when "*" then return false
+  #   when color != @player then return false
+  #   end
+  # end
 end
 
 class Board
+  attr_accessor :board
 
   def initialize
     make_board
@@ -95,6 +121,8 @@ class Board
   def over?
 
   end
+
+
 end
 
 board = Board.new
