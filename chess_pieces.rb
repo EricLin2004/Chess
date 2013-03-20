@@ -16,7 +16,8 @@ class Piece
 
   def move(from_pos, to_pos, board)
     if possible_move?(from_pos, to_pos, board)
-
+      board[to_pos[0]][to_pos[1]] = board[from_pos[0]][from_pos[1]]
+      board[from_pos[0]][from_pos[1]] = '*'
     else
       false
     end
@@ -25,9 +26,12 @@ class Piece
   def possible_move?(from_pos, to_pos, board)
     destination_object = board[to_pos[0]][to_pos[1]]
     from_object = board[from_pos[0]][from_pos[1]]
+    unless destination_object == '*'
+      return false if from_object.color == destination_object.color
+    end
 
-    return false if from_object.color == destination_object.color
     possible_position = nil
+    end_pos = nil
     pos_moves_array = possible_moves(from_pos)
     pos_moves_array.each_with_index do |hash, i|
       if hash.has_value?(to_pos)
@@ -36,7 +40,7 @@ class Piece
         break
       end
     end
-    return false unless possible_positon
+    return false unless possible_position
 
     until pos_moves_array[end_pos][:prev_pos] == from_pos
       check_location = pos_moves_array[end_pos][:prev_pos]
@@ -91,10 +95,6 @@ class King < Piece
     @move_mult = false
   end
 
-  def move(pos)
-
-  end
-
   def move_deltas
     [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]]
   end
@@ -132,9 +132,6 @@ class Knight < Piece
     @move_mult = false
   end
 
-  def move(pos)
-  end
-
   def move_deltas
     [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]]
   end
@@ -145,10 +142,6 @@ class Rook < Piece
   def initialize
     super('♖')
     @move_mult = true
-  end
-
-  def move(pos)
-
   end
 
   def move_deltas
@@ -163,11 +156,44 @@ class Pawn < Piece
     @move_mult = false
   end
 
-  def move(pos)
-
+  def move_deltas
+    if color == :white
+      [[1,0],[1,1],[1,-1]]
+    elsif color == :blue
+      [[-1,0],[-1,-1],[-1,1]]
+    end
   end
 
-  def move_deltas
-    [[1,0]]
+  def possible_move?(from_pos, to_pos, board)
+    destination_object = board[to_pos[0]][to_pos[1]]
+    possible_position = nil
+    pos_moves_array = possible_moves(from_pos)
+    pos_moves_array.each_with_index do |hash, i|
+      if hash.has_value?(to_pos)
+        possible_position = true
+      end
+    end
+
+    return false unless possible_position
+
+
+    if destination_object == '*' && from_pos[1] != to_pos[1]
+      return false
+    elsif destination_object != '*' && from_pos[1] == to_pos[1]
+      return false
+    end
+
+    return false unless in_bounds?(from_pos, move_deltas)
+
+    true
+  end
+
+  def move(from_pos, to_pos, board)
+    if possible_move?(from_pos, to_pos, board)
+      board[to_pos[0]][to_pos[1]] = board[from_pos[0]][from_pos[1]]
+      board[from_pos[0]][from_pos[1]] = '*'
+    else
+      false
+    end
   end
 end

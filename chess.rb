@@ -18,19 +18,19 @@ class Chess
 
   def play_turn
     from_pos, to_pos = get_move
-    piece = @game_board[from_pos[0]][from_pos[1]]
+    piece = @game_board.board[from_pos[0]][from_pos[1]]
 
-    until piece.move(from_pos, to_pos, @game_board)
+    until piece.move(from_pos, to_pos, @game_board.board)
       puts "Invalid move. Try again."
       from_pos, to_pos = get_move
-      piece = @game_board[from_pos[0]][from_pos[1]]
+      piece = @game_board.board[from_pos[0]][from_pos[1]]
     end
 
     @player = (@player == :white ? :blue : :white)
   end
 
   def get_move
-    puts "Player #{@player.to_s.capitalize}, pick your piece (ex. a2)."
+    puts "Player #{@player.to_s.capitalize}, pick your piece (ex. a1):"
     from_pos = parse(gets.chomp)
     puts "Where would you like to move?"
     to_pos = parse(gets.chomp)
@@ -125,6 +125,6 @@ class Board
 
 end
 
-board = Board.new
-board.display
+x = Chess.new
+x.run
 
