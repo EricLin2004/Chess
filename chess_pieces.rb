@@ -24,6 +24,8 @@ class Piece
   end
 
   def possible_move?(from_pos, to_pos, board)
+    #REV: why is this so long? cant you just construct the possible moves array
+    #REV: and then check if the to_pos is included in it?
     destination_object = board[to_pos[0]][to_pos[1]]
     from_object = board[from_pos[0]][from_pos[1]]
     unless destination_object == '*'
@@ -105,6 +107,7 @@ class Queen < Piece
 
   def initialize
     super('♕')
+    #REV: why not set this in the parent class as default to true?
     @move_mult = true
   end
 

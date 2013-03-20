@@ -29,6 +29,7 @@ class Chess
     @player = (@player == :white ? :blue : :white)
   end
 
+  #REV: You may want to move this into a HumanPlayer class.
   def get_move
     puts "Player #{@player.to_s.capitalize}, pick your piece (ex. a1):"
     from_pos = parse(gets.chomp)
@@ -81,6 +82,16 @@ class Board
   end
 
   def make_royalty_row
+    #REV: DRY it up! something like this:
+    #REV: def make_row(color)
+    #REV:   royalty = [Rook, Knight, Bishop, King, Queen, ...]
+    #REV:   royalty_row = royalty.map do |class|
+    #REV:     piece = class.new
+    #REV:     piece.color = color
+    #REV:   end
+    #REV:  end
+    #REV:
+    #REV: and then... royalty_column_w = make_row(:white)
     royalty_column_w = [Rook.new, Knight.new, Bishop.new, King.new,
                        Queen.new, Bishop.new, Knight.new, Rook.new]
     royalty_column_w.each {|piece| piece.color = :white }
@@ -91,6 +102,7 @@ class Board
   end
 
   def make_pawn_row(color)
+    #REV: why not just put color in the Piece's initialize function?
     pawn_row = []
     8.times { pawn_row << Pawn.new }
     pawn_row.each { |pawn| pawn.color = color }
