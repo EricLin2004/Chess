@@ -10,6 +10,8 @@ class Piece
     @symbol = symbol
   end
 
+# REV: might be more appropriate to initialize with color and leave color as attr_reader
+#     as I don't think there is any situation where the color should be changing
   def display_piece
     @symbol.colorize(@color)
   end
@@ -53,6 +55,7 @@ class Piece
     true
   end
 
+# REV: might be more clear to just have a variable saved for (from + vec)
   def possible_moves(from_pos)
     possible_moves = []
     if @move_mult
@@ -94,7 +97,7 @@ class King < Piece
     super('♔')
     @move_mult = false
   end
-
+# REV: I like this organization with the move_deltas
   def move_deltas
     [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]]
   end
