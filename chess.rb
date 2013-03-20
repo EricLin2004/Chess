@@ -81,6 +81,7 @@ class Board
   end
 
   def make_royalty_row
+  # REV: I think the kings are actually suppose to be across from one another
     royalty_column_w = [Rook.new, Knight.new, Bishop.new, King.new,
                        Queen.new, Bishop.new, Knight.new, Rook.new]
     royalty_column_w.each {|piece| piece.color = :white }
