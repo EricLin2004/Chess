@@ -2,6 +2,9 @@
 require 'colorize'
 require 'debugger'
 
+# REV: one thing to consider is that checks on the king will influence possible moves
+#     so you'll either want to pass in the board to piece objects for the position information
+#     or have an additional filter on the possible_moves in board/chess classes
 class Piece
   attr_reader :symbol
   attr_accessor :color
