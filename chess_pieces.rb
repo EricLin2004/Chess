@@ -166,6 +166,11 @@ class Pawn < Piece
 
   def possible_move?(from_pos, to_pos, board)
     destination_object = board[to_pos[0]][to_pos[1]]
+    from_object = board[from_pos[0]][from_pos[1]]
+    unless destination_object == '*'
+      return false if from_object.color == destination_object.color
+    end
+
     possible_position = nil
     pos_moves_array = possible_moves(from_pos)
     pos_moves_array.each_with_index do |hash, i|
@@ -182,8 +187,6 @@ class Pawn < Piece
     elsif destination_object != '*' && from_pos[1] == to_pos[1]
       return false
     end
-
-    return false unless in_bounds?(from_pos, move_deltas)
 
     true
   end
